@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fulcrum Sports Group</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800;900&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --pitch:#FBFAF7;
+    --fairway:#F2EFE6;
+    --fairway-line:#E1DACB;
+    --chalk:#16211B;
+    --chalk-dim:#65695F;
+    --gold:#96690F;
+    --whistle:#075985;
+    --track:#15803D;
+    --amber:#92400E;
+    --radius:10px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--pitch);color:var(--chalk);font-family:'IBM Plex Sans',sans-serif;-webkit-font-smoothing:antialiased;}
+  h1,h2,h3{font-family:'Big Shoulders Display',sans-serif;font-weight:800;text-transform:uppercase;letter-spacing:.01em;margin:0;}
+  a{color:inherit;}
+  button{font-family:inherit;cursor:pointer;}
+  .mono{font-family:'IBM Plex Mono',monospace;}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 28px;}
+
+  :focus-visible{outline:2px solid var(--gold);outline-offset:3px;}
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important;scroll-behavior:auto !important;}
+  }
+
+  /* ---------- NAV ---------- */
+  header.site{position:sticky;top:0;z-index:50;background:rgba(11,19,16,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--fairway-line);}
+  .navrow{display:flex;align-items:center;justify-content:space-between;padding:16px 28px;max-width:1120px;margin:0 auto;}
+  .brand{display:flex;align-items:center;gap:10px;text-decoration:none;}
+  .brand-chevrons{display:flex;align-items:flex-end;gap:3px;}
+  .brand-word{font-family:'Big Shoulders Display',sans-serif;font-weight:800;font-style:italic;font-size:20px;letter-spacing:.02em;color:var(--chalk);}
+  nav.links{display:flex;gap:6px;}
+  nav.links button{background:none;border:none;color:var(--chalk-dim);font-size:13px;letter-spacing:.04em;text-transform:uppercase;font-weight:600;padding:9px 14px;border-radius:7px;transition:color .15s, background .15s;}
+  nav.links button:hover{color:var(--chalk);background:var(--fairway);}
+  nav.links button.active{color:var(--pitch);background:var(--gold);}
+  .navburger{display:none;background:none;border:1px solid var(--fairway-line);border-radius:7px;color:var(--chalk);padding:8px 11px;}
+
+  @media (max-width:760px){
+    nav.links{display:none;position:absolute;top:64px;left:0;right:0;background:var(--pitch);flex-direction:column;padding:10px;border-bottom:1px solid var(--fairway-line);gap:2px;}
+    nav.links.open{display:flex;}
+    .navburger{display:block;}
+  }
+
+  /* ---------- VIEWS ---------- */
+  .view{display:none;}
+  .view.active{display:block;animation:fadein .35s ease;}
+  @keyframes fadein{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+  /* ---------- HERO ---------- */
+  .hero{padding:88px 0 64px;position:relative;overflow:hidden;}
+  .hero-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.2em;color:var(--gold);text-transform:uppercase;margin-bottom:18px;}
+  .hero h1{font-size:clamp(40px,7vw,84px);line-height:.96;color:var(--chalk);max-width:11ch;}
+  .hero h1 em{font-style:italic;color:var(--gold);}
+  .hero-sub{font-size:18px;line-height:1.6;color:var(--chalk-dim);max-width:52ch;margin:26px 0 34px;}
+  .hero-chevrons{position:absolute;right:-40px;top:50%;transform:translateY(-50%);opacity:.9;}
+  .cta-row{display:flex;gap:14px;flex-wrap:wrap;}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:14px 24px;border-radius:8px;font-weight:700;font-size:14px;letter-spacing:.03em;text-transform:uppercase;border:none;text-decoration:none;transition:transform .15s, box-shadow .15s;}
+  .btn:hover{transform:translateY(-2px);}
+  .btn-primary{background:var(--gold);color:var(--pitch);}
+  .btn-primary:hover{box-shadow:0 8px 22px rgba(200,154,62,.28);}
+  .btn-ghost{background:transparent;color:var(--chalk);border:1px solid var(--fairway-line);}
+  .btn-ghost:hover{border-color:var(--gold);color:var(--gold);}
+
+  /* ---------- SECTION SHELL ---------- */
+  .section{padding:78px 0;border-top:1px solid var(--fairway-line);}
+  .section-head{margin-bottom:44px;max-width:62ch;}
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.18em;color:var(--gold);text-transform:uppercase;margin-bottom:12px;}
+  .section-head h2{font-size:clamp(28px,4vw,42px);color:var(--chalk);}
+  .section-head p{color:var(--chalk-dim);font-size:16px;line-height:1.6;margin-top:14px;}
+
+  /* ---------- ABOUT / MISSION ---------- */
+  .lede{font-family:'Big Shoulders Display',sans-serif;font-size:clamp(22px,3vw,30px);line-height:1.35;color:var(--chalk);font-weight:600;max-width:38ch;}
+  .lede b{color:var(--gold);font-weight:800;}
+  .about-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:56px;align-items:start;}
+  @media (max-width:820px){.about-grid{grid-template-columns:1fr;gap:34px;}}
+  .promise-list{display:flex;flex-direction:column;gap:24px;}
+  .promise-item{display:flex;gap:16px;align-items:flex-start;}
+  .promise-mark{font-family:'Big Shoulders Display',sans-serif;font-weight:800;font-size:24px;color:var(--gold);line-height:1.2;flex-shrink:0;}
+  .promise-text{font-size:17px;font-weight:600;color:var(--chalk);line-height:1.4;}
+
+  /* ---------- PILLARS ---------- */
+  .pillars{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+  @media (max-width:900px){.pillars{grid-template-columns:repeat(2,1fr);}}
+  @media (max-width:520px){.pillars{grid-template-columns:1fr;}}
+  .pillar{background:var(--fairway);border:1px solid var(--fairway-line);border-radius:var(--radius);padding:22px;}
+  .pillar-tag{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;padding:4px 9px;border-radius:5px;margin-bottom:14px;color:var(--pitch);font-weight:700;}
+  .pillar h3{font-size:18px;color:var(--chalk);margin-bottom:8px;text-transform:none;letter-spacing:0;}
+  .pillar p{font-size:13.5px;color:var(--chalk-dim);line-height:1.55;margin:0;}
+
+  /* ---------- ATHLETE / TEAM GRIDS ---------- */
+  .grid-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+  @media (max-width:860px){.grid-cards{grid-template-columns:repeat(2,1fr);}}
+  @media (max-width:560px){.grid-cards{grid-template-columns:1fr;}}
+
+  .athlete-card{background:var(--fairway);border:1px solid var(--fairway-line);border-radius:var(--radius);overflow:hidden;text-align:left;color:inherit;transition:border-color .15s, transform .15s;}
+  .athlete-card:hover{border-color:var(--gold);transform:translateY(-3px);}
+  .athlete-photo{height:150px;display:flex;align-items:center;justify-content:center;font-family:'Big Shoulders Display',sans-serif;font-size:44px;font-weight:800;color:var(--pitch);}
+  .athlete-body{padding:18px 20px 20px;}
+  .sport-tag{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:3px 8px;border-radius:5px;background:var(--pitch);color:var(--gold);border:1px solid var(--fairway-line);margin-bottom:10px;}
+  .athlete-name{font-size:21px;color:var(--chalk);margin-bottom:2px;}
+  .athlete-pos{font-size:13px;color:var(--chalk-dim);margin-bottom:14px;}
+  .athlete-style{border-top:1px solid var(--fairway-line);padding-top:12px;font-size:12.5px;color:var(--chalk-dim);line-height:1.45;}
+  .athlete-style b{display:block;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--gold);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px;font-weight:600;}
+
+  .team-card{background:var(--fairway);border:1px solid var(--fairway-line);border-radius:var(--radius);padding:24px;}
+  .team-photo{width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Big Shoulders Display',sans-serif;font-weight:800;font-size:22px;color:var(--pitch);margin-bottom:16px;}
+  .team-name{font-size:19px;color:var(--chalk);margin-bottom:3px;}
+  .team-role{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--gold);letter-spacing:.05em;margin-bottom:12px;}
+  .team-bio{font-size:13.5px;color:var(--chalk-dim);line-height:1.6;}
+
+  .empty-note{background:var(--fairway);border:1px dashed var(--fairway-line);border-radius:var(--radius);padding:28px;color:var(--chalk-dim);font-size:14px;text-align:center;margin-top:22px;}
+
+  /* ---------- ATHLETE DETAIL ---------- */
+  .back-btn{background:none;border:none;color:var(--chalk-dim);font-size:13px;font-weight:600;letter-spacing:.03em;text-transform:uppercase;margin-bottom:32px;display:inline-flex;align-items:center;gap:8px;}
+  .back-btn:hover{color:var(--gold);}
+  .detail-grid{display:grid;grid-template-columns:280px 1fr;gap:48px;}
+  @media (max-width:760px){.detail-grid{grid-template-columns:1fr;}}
+  .detail-photo{width:100%;aspect-ratio:1;border-radius:var(--radius);display:flex;align-items:center;justify-content:center;font-family:'Big Shoulders Display',sans-serif;font-size:96px;font-weight:800;color:var(--pitch);}
+  .detail-swgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:20px;}
+  @media (max-width:480px){.detail-swgrid{grid-template-columns:1fr;}}
+  .detail-swgrid .box{background:var(--fairway);border:1px solid var(--fairway-line);border-radius:8px;padding:14px;}
+  .detail-swgrid .box .lab{font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:700;color:var(--gold);letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px;}
+  .detail-swgrid .box p{font-size:13px;color:var(--chalk-dim);line-height:1.55;margin:0;}
+  .detail-name{font-size:clamp(32px,5vw,52px);color:var(--chalk);}
+  .detail-meta{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--chalk-dim);margin:10px 0 18px;}
+  .detail-meta span{color:var(--gold);}
+  .detail-style{font-size:14.5px;color:var(--chalk);line-height:1.6;background:var(--fairway);border:1px solid var(--fairway-line);border-radius:8px;padding:14px;}
+  .detail-style b{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--gold);letter-spacing:.08em;text-transform:uppercase;display:block;margin-bottom:6px;}
+  .detail-bio{font-size:15.5px;line-height:1.75;color:var(--chalk-dim);max-width:60ch;margin-top:20px;}
+
+  /* ---------- JOIN / FORM ---------- */
+  .join-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:56px;}
+  @media (max-width:860px){.join-grid{grid-template-columns:1fr;}}
+  .field{margin-bottom:18px;}
+  .field label{display:block;font-size:12.5px;font-weight:600;color:var(--chalk-dim);margin-bottom:7px;letter-spacing:.02em;}
+  .field .req{color:var(--gold);}
+  .field input, .field select, .field textarea{
+    width:100%;background:var(--fairway);border:1px solid var(--fairway-line);border-radius:7px;
+    padding:11px 13px;color:var(--chalk);font-family:'IBM Plex Sans',sans-serif;font-size:14.5px;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus{border-color:var(--gold);outline:none;}
+  .field-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  @media (max-width:480px){.field-row{grid-template-columns:1fr;}}
+  .consent{display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--chalk-dim);margin:22px 0;line-height:1.5;}
+  .consent input{margin-top:3px;}
+  .form-note{background:var(--fairway);border:1px solid var(--fairway-line);border-radius:var(--radius);padding:20px;font-size:13px;color:var(--chalk-dim);line-height:1.65;margin-bottom:24px;}
+  .form-note b{color:var(--chalk);}
+  #formStatus{margin-top:16px;font-size:13.5px;color:var(--track);display:none;}
+
+  /* ---------- FOOTER ---------- */
+  footer{border-top:1px solid var(--fairway-line);padding:36px 0;}
+  .footer-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;}
+  .footer-row .mono{font-size:11px;color:var(--chalk-dim);letter-spacing:.06em;}
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="navrow">
+    <a href="#" class="brand" onclick="showView('home');return false;">
+      <svg width="34" height="26" viewBox="0 40 305 235" class="brand-chevrons">
+        <polyline points="20,185 42,207 20,229" fill="none" stroke="#0EA5E9" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
+        <polyline points="110,178 138,207 110,236" fill="none" stroke="#C89A3E" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
+        <polyline points="215,170 252,207 215,244" fill="none" stroke="#22C55E" stroke-width="28" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span class="brand-word">Fulcrum Sports Group</span>
+    </a>
+    <button class="navburger" onclick="document.querySelector('nav.links').classList.toggle('open')" aria-label="Menu">☰</button>
+    <nav class="links">
+      <button onclick="showView('home')" data-nav="home">Home</button>
+      <button onclick="showView('athletes')" data-nav="athletes">Athletes</button>
+      <button onclick="showView('team')" data-nav="team">Team</button>
+      <button onclick="showView('join')" data-nav="join">Get Scouted</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ================= HOME ================= -->
+  <section id="view-home" class="view active">
+    <div class="hero">
+      <div class="hero-eyebrow">Nigeria &middot; Football &amp; Basketball &middot; Est. 2026</div>
+      <h1>The fixed point<br>that gives talent <em>leverage</em>.</h1>
+      <p class="hero-sub">Fulcrum Sports Group finds athletes the established academy circuit overlooks, represents them through a fully licensed and transparent process, and funds their welfare before we ever earn a commission.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="#" onclick="showView('join');return false;">Get Scouted</a>
+        <a class="btn btn-ghost" href="#" onclick="showView('athletes');return false;">Meet the Athletes</a>
+      </div>
+    </div>
+
+    <div class="section" style="border-top:1px solid var(--fairway-line);">
+      <div class="about-grid">
+        <div>
+          <div class="eyebrow">What We Are</div>
+          <p class="lede">A fulcrum is <b>the fixed point that makes leverage possible</b> — the small, precise thing that lets a much larger force move. That's the role we play: the pivot between raw talent and the chance to go professional.</p>
+        </div>
+        <div class="promise-list">
+          <div class="promise-item"><span class="promise-mark">&rarr;</span><span class="promise-text">We find talent the academy circuit never visits.</span></div>
+          <div class="promise-item"><span class="promise-mark">&rarr;</span><span class="promise-text">We fund your training and welfare before we ever earn a commission.</span></div>
+          <div class="promise-item"><span class="promise-mark">&rarr;</span><span class="promise-text">Every transfer runs through a FIFA-licensed agent — checkable, not promised.</span></div>
+          <div class="promise-item"><span class="promise-mark">&rarr;</span><span class="promise-text">Football today. Basketball, and the world stage, next.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-head">
+        <div class="eyebrow">What We're Building</div>
+        <h2>Four things, done properly.</h2>
+        <p>Most agencies pick one. We built the business around doing all four without cutting corners on any of them.</p>
+      </div>
+      <div class="pillars">
+        <div class="pillar">
+          <span class="pillar-tag" style="background:var(--gold);">Legitimacy</span>
+          <h3>Licensed from day one</h3>
+          <p>Every football transfer runs through our FIFA-licensed co-founder — fully compliant, checkable.</p>
+        </div>
+        <div class="pillar">
+          <span class="pillar-tag" style="background:var(--whistle);">Protection</span>
+          <h3>Lawyer-reviewed contracts</h3>
+          <p>Every athlete's terms are explained in plain language, with a guardian present for minors.</p>
+        </div>
+        <div class="pillar">
+          <span class="pillar-tag" style="background:var(--amber);">Visibility</span>
+          <h3>Built to be seen</h3>
+          <p>Highlight reels and digital scouting profiles for every athlete we represent.</p>
+        </div>
+        <div class="pillar">
+          <span class="pillar-tag" style="background:var(--track);">Discovery</span>
+          <h3>Grassroots-first</h3>
+          <p>We scout parks, schools, and universities — talent the academy circuit overlooks.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-head">
+        <div class="eyebrow">Our Goal</div>
+        <h2>Nigeria's most trusted pipeline to global sport.</h2>
+        <p>Not trusted because we say so — trusted because every part of how we operate is built to be verified: our license, our contracts, and a welfare model that funds athletes before it profits from them.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= ATHLETES LIST ================= -->
+  <section id="view-athletes" class="view">
+    <div class="section" style="border-top:none;padding-top:56px;">
+      <div class="section-head">
+        <div class="eyebrow">Our Roster</div>
+        <h2>Athletes</h2>
+        <p>Every athlete below is represented under a fully licensed, welfare-first agreement — full profile is one tap away.</p>
+      </div>
+      <div class="grid-cards" id="athleteGrid"></div>
+      <div class="empty-note">This roster is a working example — as athletes sign with Fulcrum, their profiles replace the placeholders here.</div>
+    </div>
+  </section>
+
+  <!-- ================= ATHLETE DETAIL ================= -->
+  <section id="view-athlete-detail" class="view">
+    <div class="section" style="border-top:none;padding-top:56px;">
+      <button class="back-btn" onclick="showView('athletes')">&larr; Back to Athletes</button>
+      <div class="detail-grid" id="athleteDetail"></div>
+    </div>
+  </section>
+
+  <!-- ================= TEAM ================= -->
+  <section id="view-team" class="view">
+    <div class="section" style="border-top:none;padding-top:56px;">
+      <div class="section-head">
+        <div class="eyebrow">Who's Behind It</div>
+        <h2>Team</h2>
+        <p>Deliberately lean — the roles that matter most are covered from day one, and we grow the team as revenue allows, not as seed capital runs out.</p>
+      </div>
+      <div class="grid-cards" id="teamGrid"></div>
+    </div>
+  </section>
+
+  <!-- ================= JOIN / GET SCOUTED ================= -->
+  <section id="view-join" class="view">
+    <div class="section" style="border-top:none;padding-top:56px;">
+      <div class="join-grid">
+        <div>
+          <div class="eyebrow">For Aspiring Athletes</div>
+          <h2 style="font-size:clamp(28px,4vw,40px);margin-bottom:16px;">Get Scouted</h2>
+          <p style="color:var(--chalk-dim);font-size:15px;line-height:1.7;">Tell us about yourself below. A real person on our scouting team reads every submission — this isn't a form that disappears into a database.</p>
+          <div class="form-note" style="margin-top:26px;">
+            <b>Good to know:</b> we never charge athletes to sign, ever. If you're under 18, please fill this out with a parent or guardian, and add their contact details below.
+          </div>
+        </div>
+
+        <form id="scoutForm" onsubmit="return submitScoutForm(event)">
+          <div class="field-row">
+            <div class="field">
+              <label>Full Name <span class="req">*</span></label>
+              <input type="text" name="name" required>
+            </div>
+            <div class="field">
+              <label>Date of Birth <span class="req">*</span></label>
+              <input type="date" name="dob" required>
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label>Sport <span class="req">*</span></label>
+              <select name="sport" required>
+                <option value="">Select</option>
+                <option>Football</option>
+                <option>Basketball</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Position <span class="req">*</span></label>
+              <input type="text" name="position" placeholder="e.g. Striker, Point Guard" required>
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label>State / Location <span class="req">*</span></label>
+              <input type="text" name="location" required>
+            </div>
+            <div class="field">
+              <label>Phone Number <span class="req">*</span></label>
+              <input type="tel" name="phone" required>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Email Address <span class="req">*</span></label>
+            <input type="email" name="email" required>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label>Parent / Guardian Name <span style="color:var(--chalk-dim);font-weight:400;">(if under 18)</span></label>
+              <input type="text" name="guardianName">
+            </div>
+            <div class="field">
+              <label>Parent / Guardian Phone <span style="color:var(--chalk-dim);font-weight:400;">(if under 18)</span></label>
+              <input type="tel" name="guardianPhone">
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Highlight Video Link <span style="color:var(--chalk-dim);font-weight:400;">(optional)</span></label>
+            <input type="url" name="video" placeholder="YouTube, Instagram, or Google Drive link">
+          </div>
+
+          <div class="field">
+            <label>Anything else we should know?</label>
+            <textarea name="message" rows="4" placeholder="Recent matches, achievements, current club or school..."></textarea>
+          </div>
+
+          <label class="consent">
+            <input type="checkbox" required>
+            <span>I consent to Fulcrum Sports Group collecting this information for scouting and recruitment purposes, in line with the Nigeria Data Protection Act. <span class="req">*</span></span>
+          </label>
+
+          <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;">Send to Fulcrum</button>
+          <div id="formStatus"></div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap footer-row">
+    <span class="mono">FULCRUM SPORTS GROUP &middot; POWERING POTENTIAL. ELEVATING CHAMPIONS.</span>
+    <span class="mono">© 2026</span>
+  </div>
+</footer>
+
+<script>
+  // ---------- DATA (edit these to add real people) ----------
+  const COLORS = ["#0EA5E9","#C89A3E","#22C55E","#FBBF24"];
+
+  const athletes = [
+    { id:"a1", name:"Chidi Okafor", sport:"Football", position:"Forward", age:17, state:"Lagos State",
+      style:"Direct and quick off the mark \u2014 likes to run in behind and finishes well off his stronger left foot.",
+      strength:"Composure in front of goal; rarely wastes a clear sight of the net inside the box.",
+      weakness:"Still developing his right foot \u2014 becomes more predictable when forced onto it.",
+      bio:"Spotted at a community showcase in Lagos, Chidi has started every match for his school side this season. Quick off the mark, strong left foot, comfortable finishing from inside or outside the box." },
+    { id:"a2", name:"Amara Bello", sport:"Football", position:"Midfielder", age:16, state:"Rivers State",
+      style:"A composed, high-vision playmaker who dictates tempo rather than chasing the game.",
+      strength:"Passing range and game intelligence well beyond her age.",
+      weakness:"Physical duels against bigger opponents \u2014 needs to add strength.",
+      bio:"A composed, high-vision midfielder scouted through our Port Harcourt grassroots program. Reads the game well beyond her age and is the primary creative outlet for her club side." },
+    { id:"a3", name:"Tunde Adeyemi", sport:"Basketball", position:"Point Guard", age:18, state:"Oyo State",
+      style:"A floor general with a quick first step \u2014 more distributor than scorer, sets up others first.",
+      strength:"Court vision and decision-making under pressure.",
+      weakness:"Perimeter shooting consistency still needs work.",
+      bio:"A floor general with a quick first step, Tunde has drawn early interest from regional scouts. Currently in our basketball development track ahead of NBA Academy Africa nominations." },
+  ];
+
+  const team = [
+    { id:"t1", name:"Johnson Emmanuel", role:"Founder", bio:"A Lagos-based computer science graduate, data analyst, and UI/UX designer with a competitive athletics and football background \u2014 track, goalkeeper, two-time university Sport and Social Director. Fulcrum is the direct result of a pull toward sport that never had a proper outlet, until now." },
+    { id:"t2", name:"[Co-Founder Name]", role:"Co-Founder — FIFA-Licensed Agent", bio:"Licensed representation and transfer negotiations. The compliance backbone that makes every Fulcrum deal fully legitimate." },
+  ];
+
+  // ---------- VIEW ROUTING ----------
+  function showView(name, athleteId){
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.querySelectorAll('nav.links button').forEach(b => b.classList.remove('active'));
+    if(name === 'athlete-detail' && athleteId){
+      renderAthleteDetail(athleteId);
+    }
+    document.getElementById('view-' + name).classList.add('active');
+    const navBtn = document.querySelector('nav.links button[data-nav="' + name + '"]');
+    if(navBtn) navBtn.classList.add('active');
+    document.querySelector('nav.links').classList.remove('open');
+    window.scrollTo({top:0, behavior:'auto'});
+  }
+
+  function initials(str){
+    return str.replace(/[\[\]]/g,'').split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
+  }
+
+  function renderAthletes(){
+    const grid = document.getElementById('athleteGrid');
+    grid.innerHTML = athletes.map((a,i) => `
+      <button class="athlete-card" onclick="showView('athlete-detail','${a.id}')" style="text-align:left;">
+        <div class="athlete-photo" style="background:${COLORS[i % COLORS.length]};">${initials(a.name)}</div>
+        <div class="athlete-body">
+          <span class="sport-tag">${a.sport}</span>
+          <div class="athlete-name">${a.name}</div>
+          <div class="athlete-pos">${a.position} &middot; Age ${a.age} &middot; ${a.state}</div>
+          <div class="athlete-style"><b>Style of Play</b>${a.style}</div>
+        </div>
+      </button>
+    `).join('');
+  }
+
+  function renderAthleteDetail(id){
+    const a = athletes.find(x => x.id === id);
+    if(!a) return;
+    const i = athletes.indexOf(a);
+    document.getElementById('athleteDetail').innerHTML = `
+      <div>
+        <div class="detail-photo" style="background:${COLORS[i % COLORS.length]};">${initials(a.name)}</div>
+        <div class="detail-swgrid">
+          <div class="box"><div class="lab">Strength</div><p>${a.strength}</p></div>
+          <div class="box"><div class="lab">Weakness</div><p>${a.weakness}</p></div>
+        </div>
+      </div>
+      <div>
+        <span class="sport-tag">${a.sport}</span>
+        <div class="detail-name">${a.name}</div>
+        <div class="detail-meta">${a.position} &middot; Age <span>${a.age}</span> &middot; <span>${a.state}</span></div>
+        <div class="detail-style"><b>Style of Play</b>${a.style}</div>
+        <p class="detail-bio">${a.bio}</p>
+      </div>
+    `;
+  }
+
+  function renderTeam(){
+    const grid = document.getElementById('teamGrid');
+    grid.innerHTML = team.map((t,i) => `
+      <div class="team-card">
+        <div class="team-photo" style="background:${COLORS[i % COLORS.length]};">${initials(t.name)}</div>
+        <div class="team-name">${t.name}</div>
+        <div class="team-role mono">${t.role}</div>
+        <div class="team-bio">${t.bio}</div>
+      </div>
+    `).join('');
+  }
+
+  // ---------- FORM SUBMISSION (mailto — no backend needed) ----------
+  function submitScoutForm(e){
+    e.preventDefault();
+    const f = e.target;
+    const data = new FormData(f);
+    const lines = [
+      "New athlete scouting submission — Fulcrum Sports Group", "",
+      "Name: " + data.get('name'),
+      "Date of Birth: " + data.get('dob'),
+      "Sport: " + data.get('sport'),
+      "Position: " + data.get('position'),
+      "State / Location: " + data.get('location'),
+      "Phone: " + data.get('phone'),
+      "Email: " + data.get('email'),
+      "Guardian Name: " + (data.get('guardianName') || "—"),
+      "Guardian Phone: " + (data.get('guardianPhone') || "—"),
+      "Highlight Video: " + (data.get('video') || "—"),
+      "Message: " + (data.get('message') || "—"),
+    ];
+    const subject = encodeURIComponent("Athlete Scouting Submission — " + data.get('name'));
+    const body = encodeURIComponent(lines.join("\n"));
+    window.location.href = `mailto:scouting@fulcrumsportsgroup.com?subject=${subject}&body=${body}`;
+
+    const status = document.getElementById('formStatus');
+    status.style.display = 'block';
+    status.textContent = "Opening your email app to send this to Fulcrum Sports Group — hit send there to complete it.";
+    return false;
+  }
+
+  renderAthletes();
+  renderTeam();
+</script>
+
+</body>
+</html>
